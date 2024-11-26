@@ -1,0 +1,163 @@
+/* common icon styling file */
+
+body{
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+/* [data-bs-theme = "dark"]{
+    --bs-primary: black;
+} */
+
+#content-window{
+    height: 100vh;
+    width: auto; 
+    transition: right 0.3s ease;
+}
+
+#content-section{
+    overflow: auto;
+}
+
+
+.header-btn{
+    border: none;
+    background-color: transparent;
+}
+
+#sidepanel{
+    height: 100vh;
+}
+
+#branding{
+    height: 200px;
+    border: 1px solid rgb(214, 214, 214);
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+    width: 100%;
+}
+/* Item Styling START */
+.item{
+    width: 170px;
+    height: 210px;
+    border-radius: 7px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    background-color: #506371;
+}
+
+item.selected{
+    border:#21A366 3px solid;
+}
+
+.item:hover{
+
+    /* background-color: #2e3f4c;  
+    transition: background-color 0.3s ease;
+     */
+    
+     filter: opacity(80%);
+
+     /* border: #506371 3px solid;
+     border-radius: 7px;;
+      */
+     cursor: pointer;
+    
+}
+
+.item:active{
+    background-color: #2e3f4c;
+}
+
+.item .image-frame{
+    height: 135px;
+    width: 100%;
+    align-items: center;
+    background-image: url('../images/icon-unknown.svg');
+    background-size: cover;
+    
+}
+
+.item .info {
+    height: 75px;
+    width: auto;
+    padding: 0px 12px;
+    margin-bottom: 2px;
+    
+    color:white;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    gap: 4px;
+}
+
+.item .info .name{
+    margin: 0px;
+    text-align: start;
+    font-size: 18px;
+}
+
+.item .info .badges{
+    display: flex;
+    flex-direction: row;
+    font-size: 11px;
+    justify-content: flex-start;
+    gap: 10px;
+}
+
+.item .info .badges span{
+    background-color: rgba(255, 255, 255, 0.2);
+    width: auto;
+    padding: 4.5px 8px;
+    border-radius: 4px;
+
+}
+
+.item-folder {
+    background-color: #2655ae;
+}
+.item-folder .image-frame {
+    background-image: url('../images/folder-icon.svg');
+}
+
+
+.item-doc{
+    background-color: #185ABD;
+}
+.item-doc .image-frame{
+    background-image: url('../images/icon-doc.svg') ;
+}
+
+
+.item-pdf{
+    background-color: #DA4C4E;
+}
+.item-pdf .image-frame{
+    background-image: url('../images/icon-pdf.svg');
+}
+
+.item-txt{
+    background-color: #117B9D;
+}
+.item-txt .image-frame{
+    background-image: url('../images/icon-txt.svg');
+}
+
+
+.item-img{
+background-color: #2E4886;
+}
+.item-img .image-frame{
+    background-image: url('../images/icon-img.svg');
+}
+
+.item-xls{
+    background-color: #21A366;
+}
+.item-xls .image-frame{
+    background-image: url('../images/icon-xls.svg');
+}
+
+/* Item Styling END */
