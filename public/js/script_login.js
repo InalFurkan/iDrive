@@ -21,7 +21,8 @@ function loginBtnClicked() {
         password: password
     };
 
-    fetch("http://localhost:8080/login", {
+    // Use a relative URL for the API request
+    fetch("/login", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -49,7 +50,7 @@ function loginBtnClicked() {
 
             // Kısa bir gecikme ile root dizinine yönlendirme
             setTimeout(() => {
-                window.location.href = "http://localhost:8080/";
+                window.location.href = "/";
             }, 1000); // 1 saniyelik bekleme (isteğe bağlı)
         })
         .catch(() => {

@@ -18,6 +18,8 @@ const API_USERNAME = "NDSServis";
 const API_PASSWORD = "ca5094ef-eae0-4bd5-a94a-14db3b8f3950";
 const BASE_URL = "https://test.divvydrive.com/Test/Staj/";
 
+module.exports = { API_USERNAME, API_PASSWORD, BASE_URL };
+
 router.post("/login", express.json(), async (req, res) => {
     const { username, password } = req.body;
 

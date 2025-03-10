@@ -15,8 +15,11 @@
     <aside id="sidepanel" class="col flex-nowrap" style="max-width: 280px; height: 100vh; display: flex;">
 
         <div class="d-flex flex-column flex-shrink-0 p-3 bg-body-tertiary" style="width: 280px;">
-            <a href="/" class="d-flex align-items-center ms-auto mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
-              <span class="fs-4">Divvy Cloud</span>
+            <a href="/" class="d-flex justify-content-center align-items-center ms-auto mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none" style="height: 96px;">
+              <!-- <span class="fs-4">Divvy Cloud</span> -->
+              <img id="logo_light" src="images/logo.svg" alt="logo" style="width: 126px; height: 37px; display: none;">
+              <img id="logo_dark" src="images/logo_dark.svg" alt="dark theme logo" style="width: 126px; height: 37px;">
+              
             </a>
             <hr>
             <ul class="nav nav-pills flex-column mb-auto">
@@ -64,6 +67,9 @@
               </ul>
             </div>
           </div>
+
+
+          
         
     </aside>
     <!-- side panel ENDS -->
@@ -75,35 +81,47 @@
             <!-- Header STARTS -->
             <div class="card-header g-0 grid row justify-content-between align-items-center" style="height: 60px;">
                 <!-- Sol Taraf -->
-                <div class="col d-flex justify-content-start">
+                <div class="col d-flex justify-content-start align-items-center">
                     <button class="header-btn" onclick="toggleSidebar()">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-layout-sidebar" viewBox="0 0 16 16">
                             <path d="M0 3a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm5-1v12h9a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1zM4 2H2a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h2z"/>
                         </svg>
                     </button>
+                    <button id="back-btn" class="btn border-0" onclick="goBack()">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/>
+                      </svg>
+                    </button>
                 </div>
                 
                 <!-- Orta Taraf -->
                  <div class="col d-flex justify-content-center">
-                  <button class="btn" onclick="newFolderBtn()">
+                  <button id="newFolderBtn" class="btn" onclick="newFolderBtn()">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-folder-plus" viewBox="0 0 16 16">
                       <path d="m.5 3 .04.87a2 2 0 0 0-.342 1.311l.637 7A2 2 0 0 0 2.826 14H9v-1H2.826a1 1 0 0 1-.995-.91l-.637-7A1 1 0 0 1 2.19 4h11.62a1 1 0 0 1 .996 1.09L14.54 8h1.005l.256-2.819A2 2 0 0 0 13.81 3H9.828a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 6.172 1H2.5a2 2 0 0 0-2 2m5.672-1a1 1 0 0 1 .707.293L7.586 3H2.19q-.362.002-.683.12L1.5 2.98a1 1 0 0 1 1-.98z"/>
                       <path d="M13.5 9a.5.5 0 0 1 .5.5V11h1.5a.5.5 0 1 1 0 1H14v1.5a.5.5 0 1 1-1 0V12h-1.5a.5.5 0 0 1 0-1H13V9.5a.5.5 0 0 1 .5-.5"/>
                     </svg>
                   </button>
 
-                  <button class="btn">
+                  <button id="download-btn" class="btn disabled border-0" onclick="showDownloadModal()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-arrow-down" viewBox="0 0 16 16">
+                      <path d="M8.5 6.5a.5.5 0 0 0-1 0v3.793L6.354 9.146a.5.5 0 1 0-.708.708l2 2a.5.5 0 0 0 .708 0l2-2a.5.5 0 0 0-.708-.708L8.5 10.293z"/>
+                      <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2M9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z"/>
+                    </svg>
+                  </button>
+
+                  <button id="rename-btn" class="btn disabled border-0" onclick="renameItem()">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-input-cursor" viewBox="0 0 16 16">
                       <path d="M10 5h4a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1h-4v1h4a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-4zM6 5V4H2a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h4v-1H2a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1z"/>
                       <path fill-rule="evenodd" d="M8 1a.5.5 0 0 1 .5.5v13a.5.5 0 0 1-1 0v-13A.5.5 0 0 1 8 1"/>
                     </svg>
                   </button>  
                   
-                  <button class="btn">
+                  <button id="trash-btn" class="btn disabled border-0" onclick="removeItems()">
                       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#dc3545" class="bi bi-trash3" viewBox="0 0 16 16">
                         <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5"/>
                       </svg>
-                    </button>
+                  </button>
                  </div>
 
 
@@ -137,48 +155,40 @@
             <!-- Content Section Starts -->
             <div id="content-section" class="card-body text-start">
                 <div class="col">
-                    <div class="row mb-2 justify-content-between">
-                        <div class="col">
-                            <h2 id="folder-name" class="card-title fw-bold">Home</h2>
-                        </div>
-                        <div class="col d-flex justify-content-end">                     
-                            <button class="btn btn-primary me-2">
-                              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-upload" viewBox="0 0 16 16">
-                                <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5"/>
-                                <path d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708z"/>
-                              </svg> 
-                              upload
-                            </button>                          
-                          
-                          <!-- <button class="btn btn-dark" onclick="newFolderBtn()">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-folder-plus" viewBox="0 0 16 16">
-                              <path d="m.5 3 .04.87a2 2 0 0 0-.342 1.311l.637 7A2 2 0 0 0 2.826 14H9v-1H2.826a1 1 0 0 1-.995-.91l-.637-7A1 1 0 0 1 2.19 4h11.62a1 1 0 0 1 .996 1.09L14.54 8h1.005l.256-2.819A2 2 0 0 0 13.81 3H9.828a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 6.172 1H2.5a2 2 0 0 0-2 2m5.672-1a1 1 0 0 1 .707.293L7.586 3H2.19q-.362.002-.683.12L1.5 2.98a1 1 0 0 1 1-.98z"/>
-                              <path d="M13.5 9a.5.5 0 0 1 .5.5V11h1.5a.5.5 0 1 1 0 1H14v1.5a.5.5 0 1 1-1 0V12h-1.5a.5.5 0 0 1 0-1H13V9.5a.5.5 0 0 1 .5-.5"/>
-                            </svg>
-                          </button>                           -->
-                        </div>
+                  <div class="row mb-2 justify-content-between">
+                    <div class="col d-flex align-items-center">
+                        <h2 id="title" class="card-title fw-bold mb-0 me-2">Home</h2>
                         
                     </div>
-
-                    <div class="row g-0">
-                        <div id="item-stack" class="hstack pt-2 flex-wrap justify-content-start gap-3">
-
-                            <!--To be filled with items-->
-
-                        </div>
+                    
+                    <div class="col d-flex justify-content-end">
+                        <!-- Upload butonu -->
+                        <button class="btn btn-primary" onclick="uploadFile()">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-upload" viewBox="0 0 16 16">
+                                <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5"/>
+                                <path d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708z"/>
+                            </svg>
+                            upload
+                        </button>
                     </div>
+                </div>
+                
+
+                <div class="row g-0">
+                  <div id="item-stack" class="hstack pt-2 flex-wrap justify-content-start gap-3">
+                    
+                  </div>
+                </div>
 
                 </div>
                 
             </div>
             <!-- Content Section ENDS -->
-
-            
         </div>
 
         <!-- Modal -->
 
-
+        <!--Create New FOlder Modal -->
       <div class="modal fade" id="newFolderModal" tabindex="-1" aria-labelledby="newFolderModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
           <div class="modal-content">
@@ -200,9 +210,105 @@
         </div>
       </div>
 
+
+      <!-- delete modal -->
+      <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="confirmDeleteModalLabel">Are you sure to delete?</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div id="modal-body" class="modal-body">
+              
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+              <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Delete</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Edit Modal -->
+      <!-- Rename Item Modal -->
+      <div class="modal fade" id="renameItemModal" tabindex="-1" aria-labelledby="renameItemModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="renameItemModalLabel">Rename Item</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="rename-modal-body">
+                    <!-- Content dynamically populated -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="saveRenameBtn">Save</button>
+                </div>
+            </div>
+        </div>
+      </div>
+
+      <!-- Upload Modal -->
+      <div class="modal fade" id="uploadFileModal" tabindex="-1" aria-labelledby="uploadFileModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="uploadFileModalLabel">File Upload</h5>
+                </div>
+                <div class="modal-body" id="upload-modal-body">
+                    <!-- Content will be dynamically injected -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="uploadBtn">Upload</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Download File Modal -->
+<!-- Download File Modal -->
+<div class="modal fade" id="downloadFileModal" tabindex="-1" aria-labelledby="downloadFileModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="downloadFileModalLabel">Download Files</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body" id="downloadModalBody">
+              <!-- Seçili dosyalar burada listelenecek -->
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+              <button type="button" class="btn btn-primary" id="confirmDownloadBtn">Download</button>
+          </div>
+      </div>
+  </div>
+</div>
+
+<!-- File Action Modal -->
+<div class="modal fade" id="fileActionModal" tabindex="-1" aria-labelledby="fileActionModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+          <div class="modal-body">
+              iDrive cannot open this file. Would you like to download it to this device instead?
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+              <button type="button" class="btn btn-primary" id="confirmDownloadButton">Yes, Download</button>
+          </div>
+      </div>
+  </div>
+</div>
+
+
+
+
     </main>
     
-
+    <script src="https://cdn.jsdelivr.net/npm/spark-md5@3.0.2/spark-md5.min.js"></script>
     <script src="js/script_index.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>

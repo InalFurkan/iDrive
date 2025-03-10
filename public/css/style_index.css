@@ -46,10 +46,17 @@ body{
     flex-direction: column;
     background-color: #506371;
 }
-
-item.selected{
-    border:#21A366 3px solid;
+.item.selected {
+    /*border: 2px solid #0d6efd; */
+    
+    transform: scale(1.02); /* Büyütme efekti */
+    transition: all 0.3s ease;
+    
+    
+    opacity: 0.75; /* Opaklığı azalt */
+    
 }
+
 
 .item:hover{
 
@@ -160,4 +167,12 @@ background-color: #2E4886;
     background-image: url('../images/icon-xls.svg');
 }
 
+.item-ppt{
+    background-color: #D35230;
+}
+.item-ppt .image-frame{
+    background-image: url('../images/icon-ppt.svg');
+}
 /* Item Styling END */
+
+
