@@ -24,6 +24,13 @@ body{
     background-color: transparent;
 }
 
+.card-header{
+    position: sticky;
+    top: 0;
+    z-index: 1000; /* Diğer içeriklerin üzerinde kalması için */
+    background-color: var(--bs-body-bg); /* Tema rengine uygun arka plan */
+}
+
 #sidepanel{
     position: fixed;
     top: 0;
