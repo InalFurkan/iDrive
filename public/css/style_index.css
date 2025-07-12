@@ -10,6 +10,7 @@ body{
 } */
 
 #content-window{
+    height: 100%; /* Ebeveyn yüksekliğini doldur */
     width: auto; 
     transition: right 0.3s ease;
 }
@@ -39,8 +40,12 @@ body{
     height: 100vh;
     z-index: 1050; /* Diğer içeriklerin üzerinde olması için */
     background-color: var(--bs-body-bg); /* Tema rengine uygun arka plan */
-    display: flex; /* Mobil görünümde açık olduğunda göster */
+    /* display: none; Mobil görünümde varsayılan olarak gizli */
 }
+
+/* body.sidebar-open #sidepanel {
+    display: flex; Sidebar açıkken göster 
+} */
 
 .sidebar-hidden {
     display: none !important; /* JavaScript ile gizlemek için */
@@ -52,10 +57,11 @@ body{
         width: 280px; /* Ekran genişken sabit 280px genişlik */
         height: 100%; /* Ebeveyn yüksekliğini doldur */
         z-index: auto;
-        display: flex; /* Orta ve büyük ekranlarda göster */
+        display: flex; /* Orta ve büyük ekranlarda her zaman göster */
     }
 
     main {
+        height: 100%; /* Ebeveyn yüksekliğini doldur */
         min-width: 0; /* Main içeriğinin flex konteyner içinde küçülmesine izin ver */
     }
 }
