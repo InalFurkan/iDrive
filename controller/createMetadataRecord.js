@@ -1,32 +1,17 @@
 const express = require('express');
 const router = express.Router();
-const fetch = require('node-fetch'); // HTTP istekleri için gerekli
-const SparkMD5 = require('spark-md5')
+const { apiRequest } = require('../config/apiService');
+const SparkMD5 = require('spark-md5');
 
-
-
-// API Temel Bilgileri
-const API_USERNAME = "NDSServis"; // Buraya API kullanıcı adını girin
-const API_PASSWORD = "ca5094ef-eae0-4bd5-a94a-14db3b8f3950"; // Buraya API şifresini girin
-const BASE_URL = "https://test.divvydrive.com/Test/Staj/";
-
-// Authorization Header'ını oluşturma
-function getAuthorizationHeader() {
-    return `Basic ${Buffer.from(`${API_USERNAME}:${API_PASSWORD}`).toString("base64")}`;
-}
 function hashMD5(fileData) {
-
     const spark = new SparkMD5.ArrayBuffer();
     spark.append(fileData);
     const fileHash = spark.end();
-
-    return fileHash
+    return fileHash;
 };
-
 
 router.post('/createMetadataRecord', express.json(), async (req, res) => {
     const data = req.body;
-
     console.log("Gönderilen Veriler:", data);
 
     const ticketID = req.session.ticket.ID;
@@ -35,15 +20,8 @@ router.post('/createMetadataRecord', express.json(), async (req, res) => {
     const herBirParcaninBoyutuByte = 1024 * 1024;
 
     try {
-        // Metadata oluşturma API isteği
-        const apiUrlMetaData = `${BASE_URL}DosyaMetaDataKaydiOlustur`;
-
-        const metaDataResponse = await fetch(apiUrlMetaData, {
+        const metaDataResult = await apiRequest('DosyaMetaDataKaydiOlustur', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': getAuthorizationHeader()
-            },
             body: JSON.stringify({
                 ticketID,
                 parcaSayisi,
@@ -52,13 +30,7 @@ router.post('/createMetadataRecord', express.json(), async (req, res) => {
             })
         });
 
-        if (!metaDataResponse.ok) {
-            throw new Error(`Metadata API isteği başarısız oldu: ${metaDataResponse.statusText}`);
-        }
-
-        const metaDataResult = await metaDataResponse.json();
         console.log("Metadata Başarıyla Oluşturuldu:", metaDataResult);
-
         return res.status(200).json({ success: true, tempKlasorID: metaDataResult.Mesaj });
     } catch (error) {
         console.error("Metadata Hatası:", error.message);

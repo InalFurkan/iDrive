@@ -1,16 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const fetch = require('node-fetch');
+const { apiRequestRaw } = require('../config/apiService');
 const multer = require('multer');
 const upload = multer();
-
-const API_USERNAME = "NDSServis";
-const API_PASSWORD = "ca5094ef-eae0-4bd5-a94a-14db3b8f3950";
-const BASE_URL = "https://test.divvydrive.com/Test/Staj/";
-
-function getAuthorizationHeader() {
-    return `Basic ${Buffer.from(`${API_USERNAME}:${API_PASSWORD}`).toString("base64")}`;
-}
 
 router.post('/uploadFile', upload.single('file'), async (req, res) => {
     const file = req.file?.buffer;
@@ -32,21 +24,13 @@ router.post('/uploadFile', upload.single('file'), async (req, res) => {
     }).toString();
 
     try {
-        const apiUrl = `${BASE_URL}DosyaDirektYukle?${params}`;
-
-        const response = await fetch(apiUrl, {
+        const response = await apiRequestRaw(`DosyaDirektYukle?${params}`, {
             method: 'POST',
             headers: {
                 'Content-Type': contentType,
-                'Authorization': getAuthorizationHeader(),
             },
             body: file,
         });
-
-        if (!response.ok) {
-            const errorText = await response.text(); // Hata detayını logla
-            throw new Error(`API isteği başarısız oldu: ${response.statusText} - ${errorText}`);
-        }
 
         const result = await response.json();
         return res.status(200).json({ success: true, data: result });

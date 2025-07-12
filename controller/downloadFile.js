@@ -1,16 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const fetch = require('node-fetch'); // HTTP istekleri için gerekli
-
-// API Temel Bilgileri
-const API_USERNAME = "NDSServis"; // Buraya API kullanıcı adını girin
-const API_PASSWORD = "ca5094ef-eae0-4bd5-a94a-14db3b8f3950"; // Buraya API şifresini girin
-const BASE_URL = "https://test.divvydrive.com/Test/Staj/";
-
-// Authorization Header'ını oluşturma
-function getAuthorizationHeader() {
-    return `Basic ${Buffer.from(`${API_USERNAME}:${API_PASSWORD}`).toString("base64")}`;
-}
+const { apiRequestRaw } = require('../config/apiService');
 
 // AJAX isteğini işleyen endpoint
 router.post('/downloadFile', express.json(), async (req, res) => {
@@ -22,15 +12,11 @@ router.post('/downloadFile', express.json(), async (req, res) => {
     console.log(dosyaAdi, klasorYolu, ticketID);
 
     try {
-        // API'ye istek URL'si
-        const apiUrl = `${BASE_URL}DosyaIndir`;
-
         // API'ye istek gönder
-        const response = await fetch(apiUrl, {
+        const response = await apiRequestRaw('DosyaIndir', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': getAuthorizationHeader()
             },
             body: JSON.stringify({
                 "ticketID": ticketID,
@@ -38,10 +24,6 @@ router.post('/downloadFile', express.json(), async (req, res) => {
                 "dosyaAdi": dosyaAdi
             })
         });
-
-        if (!response.ok) {
-            throw new Error(`API isteği başarısız oldu: ${response.statusText}`);
-        }
 
         // API yanıtını işleme
         const contentType = response.headers.get('Content-Type');  // Dosyanın türünü al
