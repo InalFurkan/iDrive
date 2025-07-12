@@ -12,11 +12,8 @@ let username = "";
 
 function toggleSidebar() {
     const sidebar = document.getElementById("sidepanel");
-    if (sidebar.style.display === "flex") {
-        sidebar.style.display = "none";
-    } else {
-        sidebar.style.display = "flex";
-    }
+    sidebar.classList.toggle("sidebar-hidden");
+    document.body.classList.toggle("no-scroll");
 }
 
 function toggleTheme() {

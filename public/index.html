@@ -9,18 +9,19 @@
 
     <title>Divvy Drive</title>
 </head>
-<body class="row gx-0 bg-primary" data-bs-theme = "dark">
+<body class="row gx-0" data-bs-theme = "dark">
     
     <!-- side panel STARTS-->
-    <aside id="sidepanel" class="col flex-nowrap" style="max-width: 280px; height: 100vh; display: flex;">
+    <aside id="sidepanel" class="col-auto sidebar-hidden">
 
-        <div class="d-flex flex-column flex-shrink-0 p-3 bg-body-tertiary" style="width: 280px;">
-            <a href="/" class="d-flex justify-content-center align-items-center ms-auto mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none" style="height: 96px;">
-              <!-- <span class="fs-4">Divvy Cloud</span> -->
-              <img id="logo_light" src="images/logo.svg" alt="logo" style="width: 126px; height: 37px; display: none;">
-              <img id="logo_dark" src="images/logo_dark.svg" alt="dark theme logo" style="width: 126px; height: 37px;">
-              
-            </a>
+        <div class="d-flex flex-column flex-shrink-0 p-3 bg-body-tertiary h-100 w-100">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <a href="/" class="d-flex justify-content-center align-items-center link-body-emphasis text-decoration-none mx-auto" style="height: 96px;">
+                    <img id="logo_light" src="images/logo.svg" alt="logo" style="width: 126px; height: 37px; display: none;">
+                    <img id="logo_dark" src="images/logo_dark.svg" alt="dark theme logo" style="width: 126px; height: 37px;">
+                </a>
+                <button class="btn-close d-md-none" aria-label="Close" onclick="toggleSidebar()"></button>
+            </div>
             <hr>
             <ul class="nav nav-pills flex-column mb-auto">
               <li class="nav-item">
@@ -75,7 +76,7 @@
     <!-- side panel ENDS -->
 
 
-    <main class="col">
+    <main class="col-12 col-md">
         <div id="content-window" class="card text-center" style=" border-radius:0px;">
             
             <!-- Header STARTS -->
