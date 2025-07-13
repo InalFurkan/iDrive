@@ -25,13 +25,13 @@
             <hr>
             <ul class="nav nav-pills flex-column mb-auto">
               <li class="nav-item">
-                <a href="#" class="nav-link active" aria-current="page" id="home-sidebar-btn">
+                <a href="#" class="nav-link link-body-emphasis active" aria-current="page" id="home-sidebar-btn">
                   <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#home"></use></svg>
                   Home
                 </a>
               </li>
               <li>
-                <a href="#" class="nav-link link-body-emphasis">
+                <a href="#" class="nav-link link-body-emphasis" id="favorites-sidebar-btn">
                   <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg>
                   Favorites
                 </a>
@@ -49,7 +49,7 @@
                 </a>
               </li>
               <li>
-                <a href="#" class="nav-link link-body-emphasis">
+                <a href="#" class="nav-link link-body-emphasis" id="trash-sidebar-btn">
                   <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#people-circle"></use></svg>
                   Trash
                 </a>
@@ -299,6 +299,24 @@
           <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
               <button type="button" class="btn btn-primary" id="confirmDownloadButton">Yes, Download</button>
+          </div>
+      </div>
+  </div>
+</div>
+
+<!-- File Viewer Modal -->
+<div class="modal fade" id="fileViewerModal" tabindex="-1" aria-labelledby="fileViewerModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="fileViewerModalLabel">File Viewer</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body" id="fileViewerBody">
+              <!-- Content will be dynamically injected here (image or iframe) -->
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
           </div>
       </div>
   </div>

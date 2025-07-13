@@ -7,6 +7,8 @@ let files = [];
 
 let isMediaView = false;
 let isDocumentView = false;
+let isFavoritesView = false;
+let isTrashView = false;
 
 let selectedFolders = [];
 let selectedFiles = [];
@@ -271,11 +273,17 @@ async function doubleClickItem(itemName) {
         // loadItems fonksiyonunu çalıştır
         await loadItems();
     } else {
-        // Eğer item bir dosya ise, kullanıcıya indirme teklifini sor
+        // Eğer item bir dosya ise, dosya türüne göre işlem yap
         console.log(`You double clicked a file: ${itemName}`);
+        const fileType = getFileType(itemName);
 
-        showFileActionModal(itemName);
-
+        if (fileType === 'img') {
+            showFileViewerModal(itemName, 'image');
+        } else if (fileType === 'pdf') {
+            showFileViewerModal(itemName, 'pdf');
+        } else {
+            showFileActionModal(itemName);
+        }
     }
 }
 
@@ -292,6 +300,31 @@ function showFileActionModal(itemName) {
         myModal.hide();
 
     });
+}
+
+async function showFileViewerModal(itemName, fileType) {
+    const fileViewerModal = new bootstrap.Modal(document.getElementById('fileViewerModal'));
+    const fileViewerBody = document.getElementById('fileViewerBody');
+
+    fileViewerBody.innerHTML = ''; // Clear previous content
+
+    if (fileType === 'image') {
+        const timestamp = new Date().getTime();
+        const img = document.createElement('img');
+        img.src = `/downloadFile?dosyaAdi=${encodeURIComponent(itemName)}&klasorYolu=${encodeURIComponent(path)}&view=true&_=${timestamp}`;
+        img.classList.add('img-fluid');
+        fileViewerBody.appendChild(img);
+    } else if (fileType === 'pdf') {
+        const timestamp = new Date().getTime();
+        const iframe = document.createElement('iframe');
+        iframe.src = `/downloadFile?dosyaAdi=${encodeURIComponent(itemName)}&klasorYolu=${encodeURIComponent(path)}&view=true&_=${timestamp}`;
+        iframe.style.width = '100%';
+        iframe.style.height = '500px'; // Adjust height as needed
+        iframe.style.border = 'none';
+        fileViewerBody.appendChild(iframe);
+    }
+
+    fileViewerModal.show();
 }
 
 
@@ -491,6 +524,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const mediaSidebarBtn = document.getElementById('media-sidebar-btn');
     const homeSidebarBtn = document.getElementById('home-sidebar-btn');
     const documentsSidebarBtn = document.getElementById('documents-sidebar-btn');
+    const favoritesSidebarBtn = document.getElementById('favorites-sidebar-btn');
+    const trashSidebarBtn = document.getElementById('trash-sidebar-btn');
     const newFolderBtn = document.getElementById('newFolderBtn');
 
     // Function to set active sidebar item
@@ -509,6 +544,8 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log("Media sidebar button clicked.");
             isMediaView = true;
             isDocumentView = false;
+            isFavoritesView = false;
+            isTrashView = false;
             path = ""; // Reset path for media view
 
             setActiveSidebarItem(mediaSidebarBtn);
@@ -531,6 +568,8 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log("Home sidebar button clicked.");
             isMediaView = false;
             isDocumentView = false;
+            isFavoritesView = false;
+            isTrashView = false;
             path = ""; // Reset path for home view
 
             setActiveSidebarItem(homeSidebarBtn);
@@ -553,6 +592,8 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log("Documents sidebar button clicked.");
             isDocumentView = true;
             isMediaView = false;
+            isFavoritesView = false;
+            isTrashView = false;
             path = ""; // Reset path for documents view
 
             setActiveSidebarItem(documentsSidebarBtn);
@@ -568,10 +609,58 @@ document.addEventListener('DOMContentLoaded', () => {
             await loadItems();
         });
     }
+
+    if (favoritesSidebarBtn) {
+        favoritesSidebarBtn.addEventListener('click', async (event) => {
+            event.preventDefault();
+            console.log("Favorites sidebar button clicked.");
+            isFavoritesView = true;
+            isMediaView = false;
+            isDocumentView = false;
+            isTrashView = false;
+            path = ""; // Reset path for favorites view
+
+            setActiveSidebarItem(favoritesSidebarBtn);
+
+            // Change page title
+            title = "Favorites";
+            document.getElementById("title").innerText = title;
+
+            // Hide "Create New Folder" button
+            newFolderBtn.style.display = 'none';
+
+            // Load items (display under development message)
+            await loadItems();
+        });
+    }
+
+    if (trashSidebarBtn) {
+        trashSidebarBtn.addEventListener('click', async (event) => {
+            event.preventDefault();
+            console.log("Trash sidebar button clicked.");
+            isTrashView = true;
+            isMediaView = false;
+            isDocumentView = false;
+            isFavoritesView = false;
+            path = ""; // Reset path for trash view
+
+            setActiveSidebarItem(trashSidebarBtn);
+
+            // Change page title
+            title = "Trash";
+            document.getElementById("title").innerText = title;
+
+            // Hide "Create New Folder" button
+            newFolderBtn.style.display = 'none';
+
+            // Load items (display under development message)
+            await loadItems();
+        });
+    }
 });
 
 async function loadItems() {
-    console.log("loadItems called. isMediaView:", isMediaView, "isDocumentView:", isDocumentView);
+    console.log("loadItems called. isMediaView:", isMediaView, "isDocumentView:", isDocumentView, "isFavoritesView:", isFavoritesView, "isTrashView:", isTrashView);
     /*
     Bu fonksiyon, sayfa yüklendiğinde çalıştırılır.
     fetchFolders ve fetchFiles fonksiyonlarını çalıştırarak veritabanından klasörler ve dosyalar alınır.
@@ -591,6 +680,20 @@ async function loadItems() {
         console.log("Fetching only document files.");
         await fetchFiles(false, true); // Fetch only document files
         folders = []; // No folders in document view
+    } else if (isFavoritesView || isTrashView) {
+        // Display under development message
+        const messageDiv = document.createElement('div');
+        messageDiv.classList.add('alert', 'alert-info', 'mt-3');
+        messageDiv.setAttribute('role', 'alert');
+        messageDiv.innerHTML = `
+            <h4 class="alert-heading">Under Development!</h4>
+            <p>This page is currently under development and not yet fully functional.</p>
+            <hr>
+            <p class="mb-0">Please check back later.</p>
+        `;
+        container.appendChild(messageDiv);
+        folders = []; // No folders in these views
+        files = []; // No files in these views
     } else {
         console.log("Fetching all files and folders.");
         await fetchFolders();
@@ -599,8 +702,8 @@ async function loadItems() {
 
     document.getElementById("title").innerText = title;
 
-    // Klasörleri önce ekle (sadece isMediaView ve isDocumentView false ise)
-    if (!isMediaView && !isDocumentView) {
+    // Klasörleri önce ekle (sadece isMediaView, isDocumentView, isFavoritesView, isTrashView false ise)
+    if (!isMediaView && !isDocumentView && !isFavoritesView && !isTrashView) {
         folders.forEach(folder => {
             const folderElement = createItemElement(folder.Adi, 'folder');
             container.appendChild(folderElement);

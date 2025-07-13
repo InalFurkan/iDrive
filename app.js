@@ -52,7 +52,11 @@ app.use(fileUploadRoutes);
 app.use(createMetadataRecordRoutes);
 app.use(sendChunkRoutes);
 app.use(dosyaYayinlaRoutes);
-app.use(downloadFileRoutes);
+app.get('/downloadFile', downloadFileRoutes);
+
+app.use((req, res) => {
+    res.status(404).sendFile(__dirname + '/public/404.html');
+});
 
 const port = 8080;
 
