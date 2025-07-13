@@ -76,6 +76,14 @@ body{
     }
 }
 
+body.sidebar-open #sidepanel {
+    display: flex; /* Sidebar açıkken göster */
+}
+
+body.sidebar-open #sidepanel {
+    display: flex; /* Sidebar açıkken göster */
+}
+
 #branding{
     height: 200px;
     border: 1px solid rgb(214, 214, 214);

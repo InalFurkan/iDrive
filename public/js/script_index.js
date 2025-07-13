@@ -5,6 +5,9 @@ let title = "Home";
 let folders = [];
 let files = [];
 
+let isMediaView = false;
+let isDocumentView = false;
+
 let selectedFolders = [];
 let selectedFiles = [];
 
@@ -483,41 +486,170 @@ initializeEventListeners();
 //     });
 // }
 
+// Event listener for Media sidebar button
+document.addEventListener('DOMContentLoaded', () => {
+    const mediaSidebarBtn = document.getElementById('media-sidebar-btn');
+    const homeSidebarBtn = document.getElementById('home-sidebar-btn');
+    const documentsSidebarBtn = document.getElementById('documents-sidebar-btn');
+    const newFolderBtn = document.getElementById('newFolderBtn');
+
+    // Function to set active sidebar item
+    function setActiveSidebarItem(activeButton) {
+        document.querySelectorAll('.nav-link').forEach(btn => {
+            btn.classList.remove('active');
+            btn.setAttribute('aria-current', 'false');
+        });
+        activeButton.classList.add('active');
+        activeButton.setAttribute('aria-current', 'page');
+    }
+
+    if (mediaSidebarBtn) {
+        mediaSidebarBtn.addEventListener('click', async (event) => {
+            event.preventDefault();
+            console.log("Media sidebar button clicked.");
+            isMediaView = true;
+            isDocumentView = false;
+            path = ""; // Reset path for media view
+
+            setActiveSidebarItem(mediaSidebarBtn);
+
+            // Change page title
+            title = "Media";
+            document.getElementById("title").innerText = title;
+
+            // Hide "Create New Folder" button
+            newFolderBtn.style.display = 'none';
+
+            // Load media items
+            await loadItems();
+        });
+    }
+
+    if (homeSidebarBtn) {
+        homeSidebarBtn.addEventListener('click', async (event) => {
+            event.preventDefault();
+            console.log("Home sidebar button clicked.");
+            isMediaView = false;
+            isDocumentView = false;
+            path = ""; // Reset path for home view
+
+            setActiveSidebarItem(homeSidebarBtn);
+
+            // Change page title
+            title = "Home";
+            document.getElementById("title").innerText = title;
+
+            // Show "Create New Folder" button
+            newFolderBtn.style.display = 'block'; // Or 'inline-block' depending on its original display style
+
+            // Load all items
+            await loadItems();
+        });
+    }
+
+    if (documentsSidebarBtn) {
+        documentsSidebarBtn.addEventListener('click', async (event) => {
+            event.preventDefault();
+            console.log("Documents sidebar button clicked.");
+            isDocumentView = true;
+            isMediaView = false;
+            path = ""; // Reset path for documents view
+
+            setActiveSidebarItem(documentsSidebarBtn);
+
+            // Change page title
+            title = "Documents";
+            document.getElementById("title").innerText = title;
+
+            // Show "Create New Folder" button
+            newFolderBtn.style.display = 'block'; // Or 'inline-block' depending on its original display style
+
+            // Load document items
+            await loadItems();
+        });
+    }
+});
+
 async function loadItems() {
+    console.log("loadItems called. isMediaView:", isMediaView, "isDocumentView:", isDocumentView);
     /*
     Bu fonksiyon, sayfa yüklendiğinde çalıştırılır.
     fetchFolders ve fetchFiles fonksiyonlarını çalıştırarak veritabanından klasörler ve dosyalar alınır.
     Ardından item öğeleri oluşturulur ve uygun container'a eklenir.
     */
 
-    await fetchFolders();
-    await fetchFiles();
-
-    document.getElementById("title").innerText = title;
-
     const container = document.querySelector('#item-stack'); // Hedef container
 
     // Önceki öğeleri temizle
     container.innerHTML = '';
 
-    // Klasörleri önce ekle
-    folders.forEach(folder => {
-        const folderElement = createItemElement(folder.Adi, 'folder');
-        container.appendChild(folderElement);
-    });
+    if (isMediaView) {
+        console.log("Fetching only media files.");
+        await fetchFiles(true, false); // Fetch only media files
+        folders = []; // No folders in media view
+    } else if (isDocumentView) {
+        console.log("Fetching only document files.");
+        await fetchFiles(false, true); // Fetch only document files
+        folders = []; // No folders in document view
+    } else {
+        console.log("Fetching all files and folders.");
+        await fetchFolders();
+        await fetchFiles(false, false); // Fetch all files
+    }
+
+    document.getElementById("title").innerText = title;
+
+    // Klasörleri önce ekle (sadece isMediaView ve isDocumentView false ise)
+    if (!isMediaView && !isDocumentView) {
+        folders.forEach(folder => {
+            const folderElement = createItemElement(folder.Adi, 'folder');
+            container.appendChild(folderElement);
+        });
+    }
 
     // Dosyaları sonra ekle
+    console.log("Files to display:", files);
     files.forEach(file => {
         const fileType = getFileType(file.Adi); // Dosya türünü belirle (ör. pdf, img, vb.)
         const fileElement = createItemElement(file.Adi, fileType, file.Boyut);
         container.appendChild(fileElement);
     });
-
-    // Klasörler ve dosyalar için event listener'ları ekle
-    // attachItemEventListeners();
 }
 
+async function fetchFiles(mediaOnly = false, documentOnly = false) {
+    console.log("fetchFiles called with mediaOnly:", mediaOnly, "documentOnly:", documentOnly);
+    /* 
+    This function will be executed when the page is loaded.
+    It uses the fetch function to send a GET request to the /getFiles endpoint. This way we are getting the files from the database.
+    If the request is successful, the files will be added to the files array.
+    If the request is not successful, the user will be shown a warning message.
+    */
 
+    try {
+        const response = await fetch('/dosyaListesiGetir', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ path, mediaOnly, documentOnly }) // path, mediaOnly ve documentOnly değişkenlerini gönderiyoruz
+        });
+
+        if (!response.ok) {
+            throw new Error('Yerel sunucu isteği başarısız oldu.');
+        }
+
+        const result = await response.json();
+        console.log("API response for files:", result);
+        if (result.success) {
+            files = result.data.SonucDosyaListe || [];
+            console.log("Files array after API response:", files);
+        } else {
+            console.error('Klasör ve dosya bilgisi alınamadı:', result.message);
+        }
+    } catch (error) {
+        console.error('Hata:', error.message);
+    }
+}
 
 function getFileType(fileName) {
     const extension = fileName.split('.').pop().toLowerCase(); // Dosya uzantısı
@@ -541,13 +673,30 @@ function getFileType(fileName) {
         case "pptx":
             return "ppt";
 
+        case "mp3":
+        case "wav":
+        case "ogg":
+        case "aac":
+        case "flac":
+            return "audio";
+        case "mp4":
+        case "avi":
+        case "mov":
+        case "wmv":
+        case "flv":
+        case "webm":
+            return "video";
+
         default:
             return 'file'; // Genel dosya sınıfı
     }
 }
 
-
 function newFolderBtn() {
+    if (isMediaView) {
+        // If in media view, hide or disable the button
+        return;
+    }
     // Modal'ı açmak için Bootstrap modal'ını kullanıyoruz
     const modal = new bootstrap.Modal(document.getElementById('newFolderModal'));
     document.getElementById('folderName').value = "";
